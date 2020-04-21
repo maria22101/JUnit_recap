@@ -20,6 +20,10 @@ public class ValidateISBN {
         throw new NumberFormatException(ISBN_NUMBER_LENGTH_INSTRUCTION);
     }
 
+    //A short valid ISBN consists of 10 digits or 9 digits + 'X';
+    //when each of the digit is multiplied by 10, 9 ..., 1 and summed up,
+    //for it to be valid it is to be divisible by 11 without a reminder.
+    //In case of an 'X' at the end the number component is 10.
     private boolean isThisAValidShortISBN(String isbn) {
         int total = 0;
 
@@ -38,6 +42,9 @@ public class ValidateISBN {
         return total % SHORT_ISBN_MULTIPLIER == 0;
     }
 
+    //A long valid ISBN consists of 13 digits
+    //when each of the digit is multiplied by 1, 3, 1, 3 ... and summed up,
+    //for it to be valid it is to be divisible by 10 without a reminder.
     private boolean isThisAValidLongISBN(String isbn) {
         int total = 0;
         int multiplicator;
