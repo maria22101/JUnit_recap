@@ -1,0 +1,11 @@
+#target folder
+/target/
+
+#InteliJ Idea settings of the project
+/.idea/
+
+#builds folder
+out/
+
+#files with description of the project structure
+*.iml
