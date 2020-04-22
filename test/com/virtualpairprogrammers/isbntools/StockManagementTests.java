@@ -17,7 +17,7 @@ public class StockManagementTests {
 
     //We are injecting the STUB into the clause (to override the use of the real external dependency)
     @Test
-    public void testCanGetACorrectLocatorCode() {
+    public void testCanGetACorrectLocatorCodeUsingStubs() {
         ExternalISBNDataService testWebService = new ExternalISBNDataService() {
             public Book lookup(String isbn) {
                 return new Book(isbn, "Of Mice And Men", "J. Steinbeck");
@@ -32,6 +32,29 @@ public class StockManagementTests {
         stockManager.setWebService(testWebService);
         stockManager.setDataBaseService(testDatabaseService);
         String isbn = "0140177396";
+        String locatorCode = stockManager.getLocatorCode(isbn);
+
+        assertEquals("7396J4", locatorCode);
+    }
+
+    //the same test as above utilizing mockito library
+    @Test
+    public void testCanGetACorrectLocatorCodeUsingMocks() {
+        String isbn = "0140177396";
+
+        //instead of instantiating (and implementing) an object as in the above test, we ask Mockito to do it for us
+        //at this point we have got a fake(or a dummy) as we have not had implementation so far:
+        ExternalISBNDataService testWebService = mock(ExternalISBNDataService.class);
+        ExternalISBNDataService testDatabaseService = mock(ExternalISBNDataService.class);
+
+        //here we give implementation to our previously constructed mock:
+        when(testWebService.lookup(anyString())).thenReturn(new Book(isbn, "Of Mice And Men", "J. Steinbeck"));
+        when(testDatabaseService.lookup(anyString())).thenReturn(null);
+
+        StockManager stockManager = new StockManager();
+        stockManager.setWebService(testWebService);
+        stockManager.setDataBaseService(testDatabaseService);
+
         String locatorCode = stockManager.getLocatorCode(isbn);
 
         assertEquals("7396J4", locatorCode);
